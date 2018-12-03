@@ -1,0 +1,147 @@
+version: '3.7'
+services:
+  bootnode:
+    hostname: bootnode
+    container_name: bootnode
+    build:
+      context: bootnode
+    ports:
+      - 30301:30301/udp
+    networks:
+      research:
+        ipv4_address: 172.3.0.111
+  node:
+    hostname: node
+    depends_on:
+      - bootnode
+    build:
+      context: node
+    container_name: node
+    ports:
+      - 8545:8545
+    entrypoint:
+      geth
+      --syncmode full
+      --bootnodes enode://69d04ae7fd6c6098f67dde806609097071e55cbffdc6e9f0c990562fe80523aa247275ffe63054294c617b6de978fbaea4e3546b3bbc3d9990a946e51767daa1@172.3.0.111:30301
+      --networkid 33
+      --rpc --rpcaddr 0.0.0.0 --rpccorsdomain "*" --rpcapi "eth,web3,net,admin,db"
+    networks:
+      research:
+        ipv4_address: 172.3.0.101
+  node-miner-1:
+    hostname: node-miner-1
+    depends_on:
+      - bootnode
+    build:
+      context: node
+    container_name: node-miner-1
+    ports:
+      - 8546:8545
+    entrypoint: geth
+      --syncmode full
+      --bootnodes enode://69d04ae7fd6c6098f67dde806609097071e55cbffdc6e9f0c990562fe80523aa247275ffe63054294c617b6de978fbaea4e3546b3bbc3d9990a946e51767daa1@172.3.0.111:30301
+      --networkid 33
+      --rpc --rpcaddr 0.0.0.0 --rpccorsdomain "*" --rpcapi "eth,web3,net,admin,db,miner"
+      --etherbase 0981d20d34a0fc96e73ffa783d0c560156142d90
+      --mine --miner.threads 1
+    networks:
+      research:
+        ipv4_address: 172.3.0.102
+  node-miner-2:
+    hostname: node-miner-2
+    depends_on:
+      - bootnode
+    build:
+      context: node
+    container_name: node-miner-2
+    ports:
+      - 8547:8545
+    entrypoint: geth
+      --syncmode full
+      --bootnodes "enode://69d04ae7fd6c6098f67dde806609097071e55cbffdc6e9f0c990562fe80523aa247275ffe63054294c617b6de978fbaea4e3546b3bbc3d9990a946e51767daa1@172.3.0.111:30301"
+      --networkid 33
+      --rpc --rpcaddr 0.0.0.0 --rpccorsdomain "*" --rpcapi "eth,web3,net,admin,db,miner"
+      --etherbase 63acc2564bd456d6dfedeabf2186acbac4b04d15
+      --mine --miner.threads 1
+    networks:
+      research:
+        ipv4_address: 172.3.0.103
+
+  node-swarm-1:
+    hostname: node-swarm-1
+    depends_on:
+      - bootnode
+    ports:
+      - 8500:8500
+    environment:
+      BOOTNODE_ID: 69d04ae7fd6c6098f67dde806609097071e55cbffdc6e9f0c990562fe80523aa247275ffe63054294c617b6de978fbaea4e3546b3bbc3d9990a946e51767daa1
+      BOOTNODE_IP: 172.3.0.111
+      ACCOUNT_ADDRESS: 0981d20d34a0fc96e73ffa783d0c560156142d90
+    build:
+      context: node-swarm
+    container_name: node-swarm-1
+    networks:
+      research:
+        ipv4_address: 172.3.0.104
+  node-swarm-2:
+    hostname: node-swarm-2
+    depends_on:
+      - bootnode
+    environment:
+      BOOTNODE_ID: 69d04ae7fd6c6098f67dde806609097071e55cbffdc6e9f0c990562fe80523aa247275ffe63054294c617b6de978fbaea4e3546b3bbc3d9990a946e51767daa1
+      BOOTNODE_IP: 172.3.0.111
+      ACCOUNT_ADDRESS: 63acc2564bd456d6dfedeabf2186acbac4b04d15
+    ports:
+      - 8501:8500
+    build:
+      context: node-swarm
+    container_name: node-swarm-2
+    networks:
+      research:
+        ipv4_address: 172.3.0.105
+
+  netstats:
+    hostname: netstats
+    environment:
+      WS_SECRET: "a38e1e50b1b82fa"
+    ports:
+      - 3000:3000
+    build:
+      context: netstats
+    container_name: netstats
+    networks:
+      research:
+        ipv4_address: 172.3.0.120
+  net-intelligence-api:
+    hostname: net-intelligence-api
+    depends_on:
+      - netstats
+      - node
+      - node-miner-1
+      - node-miner-2
+    build:
+      context: net-intelligence-api
+    container_name: net-intelligence-api
+    networks:
+      research:
+        ipv4_address: 172.3.0.121
+  explorer:
+    hostname: explorer
+    environment:
+      GETH_IRC_IP: 127.0.0.1
+    depends_on:
+      - node
+    build:
+      context: explorer
+    container_name: explorer
+    ports:
+      - 8000:8000
+    networks:
+      research:
+        ipv4_address: 172.3.0.122
+networks:
+  research:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.3.0.0/24
