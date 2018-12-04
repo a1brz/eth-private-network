@@ -1,4 +1,4 @@
-# Ethereum private network
+# Ethereum PoA private network
 A Docker based implementation of blockchain network for testing and development purposes including:
 - 1 Bootnode
 - 1 Ethereum node
@@ -6,6 +6,9 @@ A Docker based implementation of blockchain network for testing and development 
 - 2 [Swarm](https://swarm-guide.readthedocs.io/en/latest/introduction.html) nodes (distributed storage platform)
 - [Ethereum Network Stats](https://github.com/cubedro/eth-netstats) (network monitoring)
 - [EthExplorer](https://github.com/etherparty/explorer) (block explorer).
+
+Using Proof-of-Authority consensus instead of Proof-of-Work.
+New block creates every 5 seconds.
 
 ## Prerequisites
 You should have installed Docker and Docker Compose in your machine.

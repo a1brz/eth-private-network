@@ -1,5 +1,18 @@
 version: '3.7'
 services:
+  netstats:
+    hostname: netstats
+    environment:
+      WS_SECRET: "a38e1e50b1b82fa"
+    ports:
+      - 3000:3000
+    build:
+      context: netstats
+    container_name: netstats
+    networks:
+      research:
+        ipv4_address: 172.3.0.120
+
   bootnode:
     hostname: bootnode
     container_name: bootnode
@@ -14,6 +27,7 @@ services:
     hostname: node
     depends_on:
       - bootnode
+      - netstats
     build:
       context: node
     container_name: node
@@ -32,6 +46,7 @@ services:
     hostname: node-miner-1
     depends_on:
       - bootnode
+      - netstats
     build:
       context: node
     container_name: node-miner-1
@@ -45,6 +60,7 @@ services:
       --ethstats node-miner-1:a38e1e50b1b82fa@netstats:3000
       --etherbase 0981d20d34a0fc96e73ffa783d0c560156142d90
       --mine --miner.threads 1
+      --unlock 0981d20d34a0fc96e73ffa783d0c560156142d90 --password password
     networks:
       research:
         ipv4_address: 172.3.0.102
@@ -52,6 +68,7 @@ services:
     hostname: node-miner-2
     depends_on:
       - bootnode
+      - netstats
     build:
       context: node
     container_name: node-miner-2
@@ -65,6 +82,7 @@ services:
       --ethstats node-miner-2:a38e1e50b1b82fa@netstats:3000
       --etherbase 63acc2564bd456d6dfedeabf2186acbac4b04d15
       --mine --miner.threads 1
+      --unlock 63acc2564bd456d6dfedeabf2186acbac4b04d15 --password password
     networks:
       research:
         ipv4_address: 172.3.0.103
@@ -102,24 +120,12 @@ services:
       research:
         ipv4_address: 172.3.0.105
 
-  netstats:
-    hostname: netstats
-    environment:
-      WS_SECRET: "a38e1e50b1b82fa"
-    ports:
-      - 3000:3000
-    build:
-      context: netstats
-    container_name: netstats
-    networks:
-      research:
-        ipv4_address: 172.3.0.120
   explorer:
     hostname: explorer
-    environment:
-      GETH_IRC_IP: 127.0.0.1
     depends_on:
       - node
+    environment:
+      GETH_IRC_IP: 127.0.0.1
     build:
       context: explorer
     container_name: explorer
