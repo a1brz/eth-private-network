@@ -19,12 +19,12 @@ services:
     container_name: node
     ports:
       - 8545:8545
-    entrypoint:
-      geth
+    entrypoint: geth
       --syncmode full
       --bootnodes enode://69d04ae7fd6c6098f67dde806609097071e55cbffdc6e9f0c990562fe80523aa247275ffe63054294c617b6de978fbaea4e3546b3bbc3d9990a946e51767daa1@172.3.0.111:30301
       --networkid 33
       --rpc --rpcaddr 0.0.0.0 --rpccorsdomain "*" --rpcapi "eth,web3,net,admin,db"
+      --ethstats node:a38e1e50b1b82fa@netstats:3000
     networks:
       research:
         ipv4_address: 172.3.0.101
@@ -42,6 +42,7 @@ services:
       --bootnodes enode://69d04ae7fd6c6098f67dde806609097071e55cbffdc6e9f0c990562fe80523aa247275ffe63054294c617b6de978fbaea4e3546b3bbc3d9990a946e51767daa1@172.3.0.111:30301
       --networkid 33
       --rpc --rpcaddr 0.0.0.0 --rpccorsdomain "*" --rpcapi "eth,web3,net,admin,db,miner"
+      --ethstats node-miner-1:a38e1e50b1b82fa@netstats:3000
       --etherbase 0981d20d34a0fc96e73ffa783d0c560156142d90
       --mine --miner.threads 1
     networks:
@@ -61,6 +62,7 @@ services:
       --bootnodes "enode://69d04ae7fd6c6098f67dde806609097071e55cbffdc6e9f0c990562fe80523aa247275ffe63054294c617b6de978fbaea4e3546b3bbc3d9990a946e51767daa1@172.3.0.111:30301"
       --networkid 33
       --rpc --rpcaddr 0.0.0.0 --rpccorsdomain "*" --rpcapi "eth,web3,net,admin,db,miner"
+      --ethstats node-miner-2:a38e1e50b1b82fa@netstats:3000
       --etherbase 63acc2564bd456d6dfedeabf2186acbac4b04d15
       --mine --miner.threads 1
     networks:
@@ -112,19 +114,6 @@ services:
     networks:
       research:
         ipv4_address: 172.3.0.120
-  net-intelligence-api:
-    hostname: net-intelligence-api
-    depends_on:
-      - netstats
-      - node
-      - node-miner-1
-      - node-miner-2
-    build:
-      context: net-intelligence-api
-    container_name: net-intelligence-api
-    networks:
-      research:
-        ipv4_address: 172.3.0.121
   explorer:
     hostname: explorer
     environment:

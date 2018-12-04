@@ -4,7 +4,6 @@ A Docker based implementation of blockchain network for testing and development 
 - 1 Ethereum node
 - 2 Ethereum miner nodes
 - 2 [Swarm](https://swarm-guide.readthedocs.io/en/latest/introduction.html) nodes (Distributed storage platform)
-- [Ethereum Network Intelligence API](https://github.com/cubedro/eth-net-intelligence-api) (network monitoring backend)
 - [Ethereum Network Stats](https://github.com/cubedro/eth-netstats) (network monitoring frontend)
 - [EthExplorer](https://github.com/etherparty/explorer) (block explorer).
 
