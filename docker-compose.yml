@@ -125,7 +125,7 @@ services:
     depends_on:
       - node
     environment:
-      GETH_IRC_IP: 127.0.0.1
+      GETH_RPC_IP: 127.0.0.1
     build:
       context: explorer
     container_name: explorer
