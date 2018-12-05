@@ -5,7 +5,7 @@ A Docker based implementation of blockchain network for testing and development 
 - 2 Ethereum miner nodes
 - 2 [Swarm](https://swarm-guide.readthedocs.io/en/latest/introduction.html) nodes (distributed storage platform)
 - [Ethereum Network Stats](https://github.com/goerli/ethstats-server)
-- [Ethereum Explorer](https://github.com/ethnamed/eth-explorer).
+- [Ethereum Explorer](https://github.com/ethnamed/eth-explorer)
 
 Using Proof-of-Authority consensus instead of Proof-of-Work.
 New block creates every 5 seconds.
