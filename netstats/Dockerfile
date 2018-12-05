@@ -5,6 +5,7 @@ RUN npm install -g grunt
 RUN git clone https://github.com/goerli/ethstats-server.git
 
 WORKDIR /ethstats-server
+RUN sed -i "s/Testnet/Ethereum/" src/views/layout.jade
 RUN npm install && grunt poa
 CMD WS_SECRET=$WS_SECRET npm start
 
