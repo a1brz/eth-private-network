@@ -17,9 +17,13 @@ services:
     hostname: bootnode
     container_name: bootnode
     build:
-      context: bootnode
+      context: node
     ports:
       - 30301:30301/udp
+    entrypoint: bootnode --nodekeyhex ${BOOTNODE_KEY}
+    expose:
+      - 30301/udp
+      - 30303/udp
     networks:
       research:
         ipv4_address: 172.3.0.111
