@@ -2,13 +2,13 @@ version: '3.7'
 services:
   netstats:
     hostname: netstats
-    environment:
-      WS_SECRET: "a38e1e50b1b82fa"
     ports:
       - 3000:3000
     build:
       context: netstats
     container_name: netstats
+    environment:
+      WS_SECRET: ${NETSTATS_SECRET}
     networks:
       research:
         ipv4_address: 172.3.0.120
@@ -27,7 +27,6 @@ services:
     hostname: node
     depends_on:
       - bootnode
-      - netstats
     build:
       context: node
     container_name: node
@@ -35,10 +34,10 @@ services:
       - 8545:8545
     entrypoint: geth
       --syncmode full
-      --bootnodes enode://69d04ae7fd6c6098f67dde806609097071e55cbffdc6e9f0c990562fe80523aa247275ffe63054294c617b6de978fbaea4e3546b3bbc3d9990a946e51767daa1@172.3.0.111:30301
-      --networkid 33
+      --bootnodes enode://${BOOTNODE_ID}@172.3.0.111:30301
+      --networkid ${NETWORK_ID}
       --rpc --rpcaddr 0.0.0.0 --rpccorsdomain "*" --rpcapi "eth,web3,net,admin,db"
-      --ethstats node:a38e1e50b1b82fa@netstats:3000
+      --ethstats node:${NETSTATS_SECRET}@netstats:3000
     networks:
       research:
         ipv4_address: 172.3.0.101
@@ -54,13 +53,12 @@ services:
       - 8546:8545
     entrypoint: geth
       --syncmode full
-      --bootnodes enode://69d04ae7fd6c6098f67dde806609097071e55cbffdc6e9f0c990562fe80523aa247275ffe63054294c617b6de978fbaea4e3546b3bbc3d9990a946e51767daa1@172.3.0.111:30301
-      --networkid 33
+      --bootnodes enode://${BOOTNODE_ID}@172.3.0.111:30301
+      --networkid ${NETWORK_ID}
       --rpc --rpcaddr 0.0.0.0 --rpccorsdomain "*" --rpcapi "eth,web3,net,admin,db,miner"
-      --ethstats node-miner-1:a38e1e50b1b82fa@netstats:3000
-      --etherbase 0981d20d34a0fc96e73ffa783d0c560156142d90
-      --mine --miner.threads 1
-      --unlock 0981d20d34a0fc96e73ffa783d0c560156142d90 --password password
+      --mine --miner.etherbase ${ACCOUNT_1}
+      --unlock ${ACCOUNT_1} --password password.txt
+      --ethstats node-miner-1:${NETSTATS_SECRET}@netstats:3000
     networks:
       research:
         ipv4_address: 172.3.0.102
@@ -76,13 +74,12 @@ services:
       - 8547:8545
     entrypoint: geth
       --syncmode full
-      --bootnodes "enode://69d04ae7fd6c6098f67dde806609097071e55cbffdc6e9f0c990562fe80523aa247275ffe63054294c617b6de978fbaea4e3546b3bbc3d9990a946e51767daa1@172.3.0.111:30301"
-      --networkid 33
+      --bootnodes enode://${BOOTNODE_ID}@172.3.0.111:30301
+      --networkid ${NETWORK_ID}
       --rpc --rpcaddr 0.0.0.0 --rpccorsdomain "*" --rpcapi "eth,web3,net,admin,db,miner"
-      --ethstats node-miner-2:a38e1e50b1b82fa@netstats:3000
-      --etherbase 63acc2564bd456d6dfedeabf2186acbac4b04d15
-      --mine --miner.threads 1
-      --unlock 63acc2564bd456d6dfedeabf2186acbac4b04d15 --password password
+      --mine --miner.etherbase ${ACCOUNT_2}
+      --unlock ${ACCOUNT_2} --password password.txt
+      --ethstats node-miner-2:${NETSTATS_SECRET}@netstats:3000
     networks:
       research:
         ipv4_address: 172.3.0.103
@@ -93,12 +90,12 @@ services:
       - bootnode
     ports:
       - 8500:8500
-    environment:
-      BOOTNODE_ID: 69d04ae7fd6c6098f67dde806609097071e55cbffdc6e9f0c990562fe80523aa247275ffe63054294c617b6de978fbaea4e3546b3bbc3d9990a946e51767daa1
-      BOOTNODE_IP: 172.3.0.111
-      ACCOUNT_ADDRESS: 0981d20d34a0fc96e73ffa783d0c560156142d90
+    entrypoint: swarm
+      --bootnodes enode://${BOOTNODE_ID}@172.3.0.120:30301
+      --bzzapi 0.0.0.0 --corsdomain "*" --httpaddr 0.0.0.0
+      --bzzaccount ${ACCOUNT_1} --password password.txt
     build:
-      context: node-swarm
+      context: node
     container_name: node-swarm-1
     networks:
       research:
@@ -107,14 +104,14 @@ services:
     hostname: node-swarm-2
     depends_on:
       - bootnode
-    environment:
-      BOOTNODE_ID: 69d04ae7fd6c6098f67dde806609097071e55cbffdc6e9f0c990562fe80523aa247275ffe63054294c617b6de978fbaea4e3546b3bbc3d9990a946e51767daa1
-      BOOTNODE_IP: 172.3.0.111
-      ACCOUNT_ADDRESS: 63acc2564bd456d6dfedeabf2186acbac4b04d15
     ports:
       - 8501:8500
+    entrypoint: swarm
+      --bootnodes enode://${BOOTNODE_ID}@172.3.0.120:30301
+      --bzzapi 0.0.0.0 --corsdomain "*" --httpaddr 0.0.0.0
+      --bzzaccount ${ACCOUNT_2} --password password.txt
     build:
-      context: node-swarm
+      context: node
     container_name: node-swarm-2
     networks:
       research:

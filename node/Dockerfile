@@ -1,8 +1,8 @@
-FROM ethereum/client-go:v1.8.19
+FROM ethereum/client-go:alltools-v1.8.19
 
-COPY data /root/.ethereum
+COPY keystore /root/.ethereum/keystore
 COPY genesis.json .
-COPY password .
+COPY password.txt .
 RUN geth init genesis.json
 
 EXPOSE 8545
