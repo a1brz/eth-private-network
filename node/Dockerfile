@@ -6,4 +6,6 @@ COPY password.txt .
 RUN geth init genesis.json
 
 EXPOSE 8545
+EXPOSE 8500
 EXPOSE 30303
+EXPOSE 30399

@@ -95,9 +95,10 @@ services:
     ports:
       - 8500:8500
     entrypoint: swarm
-      --bootnodes enode://${BOOTNODE_ID}@172.3.0.120:30301
+      --bootnodes enode://${BOOTNODE_ID}@172.3.0.111:30301
       --bzzapi 0.0.0.0 --corsdomain "*" --httpaddr 0.0.0.0
       --bzzaccount ${ACCOUNT_1} --password password.txt
+      --bzznetworkid ${NETWORK_ID}
     build:
       context: node
     container_name: node-swarm-1
@@ -111,9 +112,10 @@ services:
     ports:
       - 8501:8500
     entrypoint: swarm
-      --bootnodes enode://${BOOTNODE_ID}@172.3.0.120:30301
+      --bootnodes enode://${BOOTNODE_ID}@172.3.0.111:30301
       --bzzapi 0.0.0.0 --corsdomain "*" --httpaddr 0.0.0.0
       --bzzaccount ${ACCOUNT_2} --password password.txt
+      --bzznetworkid ${NETWORK_ID}
     build:
       context: node
     container_name: node-swarm-2
