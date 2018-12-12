@@ -1,4 +1,4 @@
-FROM ethereum/client-go:alltools-v1.8.19
+FROM ethereum/client-go:alltools-v1.8.20
 
 COPY keystore /root/.ethereum/keystore
 COPY genesis.json .
