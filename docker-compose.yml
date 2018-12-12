@@ -10,11 +10,8 @@ services:
     environment:
       WS_SECRET: ${NETSTATS_SECRET}
     networks:
-      research:
-        ipv4_address: 172.3.0.120
-
+      - research
   bootnode:
-    hostname: bootnode
     container_name: bootnode
     build:
       context: node
@@ -28,7 +25,6 @@ services:
       research:
         ipv4_address: 172.3.0.111
   node:
-    hostname: node
     depends_on:
       - bootnode
     build:
@@ -43,10 +39,8 @@ services:
       --rpc --rpcaddr 0.0.0.0 --rpccorsdomain "*" --rpcapi "eth,web3,net,admin,db"
       --ethstats node:${NETSTATS_SECRET}@netstats:3000
     networks:
-      research:
-        ipv4_address: 172.3.0.101
+      - research
   node-miner-1:
-    hostname: node-miner-1
     depends_on:
       - bootnode
       - netstats
@@ -64,10 +58,8 @@ services:
       --unlock ${ACCOUNT_1} --password password.txt
       --ethstats node-miner-1:${NETSTATS_SECRET}@netstats:3000
     networks:
-      research:
-        ipv4_address: 172.3.0.102
+      - research
   node-miner-2:
-    hostname: node-miner-2
     depends_on:
       - bootnode
       - netstats
@@ -85,11 +77,9 @@ services:
       --unlock ${ACCOUNT_2} --password password.txt
       --ethstats node-miner-2:${NETSTATS_SECRET}@netstats:3000
     networks:
-      research:
-        ipv4_address: 172.3.0.103
+      - research
 
   node-swarm-1:
-    hostname: node-swarm-1
     depends_on:
       - bootnode
     ports:
@@ -103,10 +93,8 @@ services:
       context: node
     container_name: node-swarm-1
     networks:
-      research:
-        ipv4_address: 172.3.0.104
+      - research
   node-swarm-2:
-    hostname: node-swarm-2
     depends_on:
       - bootnode
     ports:
@@ -120,23 +108,20 @@ services:
       context: node
     container_name: node-swarm-2
     networks:
-      research:
-        ipv4_address: 172.3.0.105
+      - research
 
   explorer:
-    hostname: explorer
     depends_on:
       - node
     environment:
-      GETH_RPC_IP: 127.0.0.1
+      GETH_NODE_IP: 127.0.0.1
     build:
       context: explorer
     container_name: explorer
     ports:
       - 8000:8000
     networks:
-      research:
-        ipv4_address: 172.3.0.122
+      - research
 networks:
   research:
     driver: bridge

@@ -5,6 +5,6 @@ RUN git clone https://github.com/ethnamed/eth-explorer.git
 
 WORKDIR /eth-explorer
 RUN npm install -g bower && npm install && bower install --allow-root
-CMD sed -i "s/209.126.79.177/$GETH_RPC_IP/" app/config.json && npm start
+CMD sed -i "s/209.126.79.177/$GETH_NODE_IP/" app/config.json && npm start
 
 EXPOSE 8000
