@@ -17,7 +17,7 @@ services:
       context: node
     ports:
       - 30301:30301/udp
-    entrypoint: bootnode --nodekeyhex ${BOOTNODE_KEY}
+    command: bootnode --nodekeyhex ${BOOTNODE_KEY}
     expose:
       - 30301/udp
       - 30303/udp
@@ -32,7 +32,7 @@ services:
     container_name: node
     ports:
       - 8545:8545
-    entrypoint: geth
+    command: geth
       --syncmode full
       --bootnodes enode://${BOOTNODE_ID}@172.3.0.111:30301
       --networkid ${NETWORK_ID}
@@ -49,7 +49,7 @@ services:
     container_name: node-miner-1
     ports:
       - 8546:8545
-    entrypoint: geth
+    command: geth
       --syncmode full
       --bootnodes enode://${BOOTNODE_ID}@172.3.0.111:30301
       --networkid ${NETWORK_ID}
@@ -68,7 +68,7 @@ services:
     container_name: node-miner-2
     ports:
       - 8547:8545
-    entrypoint: geth
+    command: geth
       --syncmode full
       --bootnodes enode://${BOOTNODE_ID}@172.3.0.111:30301
       --networkid ${NETWORK_ID}
@@ -84,7 +84,7 @@ services:
       - bootnode
     ports:
       - 8500:8500
-    entrypoint: swarm
+    command: swarm
       --bootnodes enode://${BOOTNODE_ID}@172.3.0.111:30301
       --bzzapi 0.0.0.0 --corsdomain "*" --httpaddr 0.0.0.0
       --bzzaccount ${ACCOUNT_1} --password password.txt
@@ -99,7 +99,7 @@ services:
       - bootnode
     ports:
       - 8501:8500
-    entrypoint: swarm
+    command: swarm
       --bootnodes enode://${BOOTNODE_ID}@172.3.0.111:30301
       --bzzapi 0.0.0.0 --corsdomain "*" --httpaddr 0.0.0.0
       --bzzaccount ${ACCOUNT_2} --password password.txt
