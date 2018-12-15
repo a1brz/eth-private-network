@@ -3,8 +3,8 @@ A Docker based implementation of blockchain network for testing and development 
 - 1 Bootnode
 - 1 Ethereum node
 - 2 Ethereum miner nodes
-- 2 [Swarm](https://swarm-guide.readthedocs.io/en/latest/introduction.html) nodes (distributed storage platform)
-- [Ethereum Network Stats](https://github.com/goerli/ethstats-server)
+- 2 [Swarm](https://swarm-gateways.net/bzz:/theswarm.eth) nodes (distributed storage platform)
+- [Ethereum Network Status Dashboard](https://github.com/goerli/ethstats-server)
 - [Ethereum Explorer](https://github.com/ethnamed/eth-explorer)
 
 Using Proof-of-Authority consensus instead of Proof-of-Work.
