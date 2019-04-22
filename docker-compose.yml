@@ -106,19 +106,6 @@ services:
     container_name: node-swarm-2
     networks:
       - research
-
-  explorer:
-    depends_on:
-      - node
-    environment:
-      GETH_NODE_IP: 127.0.0.1
-    build:
-      context: explorer
-    container_name: explorer
-    ports:
-      - 8000:8000
-    networks:
-      - research
 networks:
   research:
     driver: bridge
